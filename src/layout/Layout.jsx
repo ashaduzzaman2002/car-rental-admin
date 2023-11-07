@@ -72,7 +72,7 @@ const LayoutComponent = () => {
     <Layout style={{ backgroundColor: "red" }}>
       <Sider
         style={{
-          height: "100vh",
+          height: "90vh",
           background: "#FCFCFC",
           padding: "10px",
         }}
