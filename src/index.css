@@ -1,0 +1,8 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:where(.css-dev-only-do-not-override-2i2tap).ant-layout {
+    background: #F6F6F6;
+}
