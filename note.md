@@ -1,0 +1,3 @@
+img_trash.svg
+
+img_frame_light_blue_a700.svg

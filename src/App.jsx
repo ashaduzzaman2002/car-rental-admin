@@ -1,12 +1,13 @@
+import { ProSidebarProvider } from "react-pro-sidebar";
 import React from "react";
-import LayoutComponent from "./layout/Layout";
+import Routes from "./Routes";
 
-const App = () => {
+function App() {
   return (
-    <>
-      <LayoutComponent />
-    </>
+    <ProSidebarProvider>
+      <Routes />
+    </ProSidebarProvider>
   );
-};
+}
 
 export default App;

@@ -1,147 +1,130 @@
 import React, { useEffect, useState } from "react";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import "./layout.css";
-import { Layout, Menu, Button, theme, Flex } from "antd";
-import { Logo } from "../assets/svg/Icons";
-const { Header, Sider, Content, Text } = Layout;
-const LayoutComponent = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
 
-  const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
+import { Sidebar } from "react-pro-sidebar";
 
-  //   useEffect(() => {
-  //     const updateChartWidth = () => {
-  //       if (window.innerWidth < 576) {
-  //         setLineChartWidth(350);
-  //         setPieChartWidth(350);
-  //         setPieChartHeight(220);
-  //         setLineChartHeight(250);
-  //       } else if (window.innerWidth < 768) {
-  //         setLineChartWidth(500);
-  //         setPieChartWidth(500);
-  //         setPieChartHeight(200);
-  //         setLineChartHeight(320);
-  //       } else if (window.innerWidth < 992) {
-  //         setLineChartWidth(370);
-  //         setPieChartWidth(430);
-  //         setPieChartHeight(225);
-  //         setLineChartHeight(320);
-  //       } else if (window.innerWidth < 1200) {
-  //         setLineChartWidth(460);
-  //         setPieChartWidth(460);
-  //         setPieChartHeight(220);
-  //         setLineChartHeight(320);
-  //       } else if (window.innerWidth < 1400) {
-  //         setLineChartWidth(550);
-  //         setPieChartWidth(550);
-  //         setPieChartHeight(230);
-  //         setLineChartHeight(320);
-  //       }
-  //     };
+import { Img, Line, Text } from "components";
+import Header from "components/header/Header";
+import { IoLogOut } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import { MenuItems } from "constants/SidebarItem";
 
-  //     updateChartWidth();
-  //     window.addEventListener("resize", updateChartWidth);
+const Layout = ({ children, bg }) => {
+  const { pathname } = window.location;
+  const [active, setActive] = useState(pathname);
 
-  //     return () => {
-  //       window.removeEventListener("resize", updateChartWidth);
-  //     };
-  //   }, []);
-
-  useState(() => {
-    if (window.innerWidth > 600) {
-      console.log(false);
-      setCollapsed(false);
+  useEffect(() => {
+    if (pathname.includes('/setting')) {
+      setActive('/setting');
     } else {
-      setCollapsed(true);
-      console.log(true);
+      setActive(pathname);
     }
-  }, [window.innerWidth]);
-
-  //   console.log(currentWidth);
-
+  }, [pathname]);
   return (
-    <Layout style={{ backgroundColor: "red" }}>
-      <Sider
-        style={{
-          height: "90vh",
-          background: "#FCFCFC",
-          padding: "10px",
-        }}
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-      >
-        <Flex className="demo-logo-vertical brand">
-          <Logo />
+    <div
+      className={`${
+        bg ? "bg-[#fff]" : "bg-gray-100_02"
+      } flex flex-col font-prompt items-center justify-start mx-auto w-full`}
+    >
+      <div className="flex md:flex-col flex-row md:gap-5 items-start justify-evenly w-full">
+        <Sidebar className="!sticky !w-[275px] bg-gray-50_02 flex h-[100vh] overflow-hidden md:hidden justify-start md:px-5 top-[0]">
+          {/* Side bar logo */}
+          <Link to={'/'} className="flex flex-row gap-[15px] items-center justify-start ml-5 md:ml-[0] mr-[76px] mt-[29px] w-auto">
+            <Img
+              className="h-[27px] w-[61px]"
+              src="/images/img_ticket.svg"
+              alt="ticket"
+            />
+            <Text
+              className="text-blue_gray-900 text-center text-xl w-auto"
+              size="txtPromptMedium20"
+            >
+              <span className="text-blue_gray-900 font-prompt font-medium">
+                Car{" "}
+              </span>
+              <span className="text-blue-300 font-prompt font-semibold">
+                Rental
+              </span>
+            </Text>
+          </Link>
 
-          {!collapsed && <p>Car Rental</p>}
-        </Flex>
-        <Menu
-          theme="light"
-          style={{ backgroundColor: "#FCFCFC", borderInlineEnd: "none" }}
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "nav 1",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "nav 2",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "nav 3",
-            },
-          ]}
-        />
-      </Sider>
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: "#FCFCFC",
-          }}
-        >
-          {/* <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          /> */}
+          {/* sidebar items */}
+          <div className="flex h-full flex-col gap-[15px] items-start justify-between ml-5 md:ml-[0] mt-[57px] w-auto">
+            {/* Side bar menu */}
+            <div className="flex flex-col gap-[15px] items-start justify-start w-full">
+              {MenuItems?.map((item, i) => (
+                <SideBarItem item={item} key={i} active={active} />
+              ))}
+            </div>
 
-          <Flex></Flex>
-        </Header>
-        <Content
-          style={{
-            margin: 20,
-            padding: 24,
-            minHeight: 280,
-            background: "#fff",
-            borderRadius: 15,
-          }}
-        >
-          Content
-        </Content>
-      </Layout>
-    </Layout>
+            {/* Sidebar logout */}
+            <div className="flex flex-row gap-[17px] items-center justify-start w-full mb-5">
+              <div className="bg-deep_orange-50_83 cursor-pointer flex flex-col items-start justify-start p-2.5 rounded-[10px] w-[93%]">
+                <div className="flex flex-row gap-3 items-center justify-start md:ml-[0] ml-[5px] w-auto">
+                  <div className="bg-gray-200_79 flex flex-col h-11 items-center justify-center p-2.5 rounded-[14px] w-11">
+                    <IoLogOut className="text-xl text-[#FF0000]" />
+                  </div>
+                  <Text
+                    className="text-base text-red-A700 w-auto"
+                    size="txtPromptMedium16Blue300"
+                  >
+                    Log Out
+                  </Text>
+                </div>
+              </div>
+              <Line className="bg-gray-100_03 h-[42px] rounded-bl-sm rounded-tl-sm w-[3px]" />
+            </div>
+          </div>
+        </Sidebar>
+        <div className="flex flex-1 flex-col gap-5 items-center justify-start md:px-5 w-full">
+          <Header />
+
+          <div className="w-[97%] md:w-full mb-5">
+            {/* <MemberTable data={MembersTableData} /> */}
+            {children}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
-export default LayoutComponent;
+
+export default Layout;
+
+const SideBarItem = ({ item, active }) => (
+  <div
+    key={item.name}
+    className="flex flex-row gap-[17px] items-center justify-start w-full"
+  >
+    <div
+      className={`${
+        active === item.path && "bg-blue-50_99"
+      } flex flex-col items-start justify-start p-2.5 rounded-[10px] w-[93%]`}
+    >
+      <Link
+        to={item.path}
+        className="flex flex-row gap-3 items-center justify-start md:ml-[0] ml-[5px] w-auto"
+      >
+        <div
+          className={`${
+            active === item.path ? "bg-white-A700_a2" : "bg-[#EAE9EA]"
+          } flex h-11 items-center justify-center rounded-[14px] w-11`}
+        >
+          {item.icon(active === item.path)}
+        </div>
+        <Text
+          className={`text-base ${
+            active === item.path ? "text-blue-300" : "text-[#3A3A3A]"
+          } w-auto`}
+          size="txtPromptMedium16Blue300"
+        >
+          {item.name}
+        </Text>
+      </Link>
+    </div>
+    <Line
+      className={`${
+        active === item.path && "bg-blue-300"
+      } h-[42px] rounded-bl-sm rounded-tl-sm w-[3px]`}
+    />
+  </div>
+);
